@@ -13,7 +13,9 @@ No version has been tagged or published.
 - Swift 6 compilation checks, negative fixtures checking their diagnostics,
   memory/SQLite/actor tests, and isolated native SwiftData probes.
 - Protocol and availability-gated inheritance validation, compatibility evidence,
-  and a prepared GitHub verification workflow.
+  and a GitHub verification workflow validated on Xcode 26.6 and 27.2 RC.
+- Explicit Xcode/simulator selection, private CI artifacts and summaries with
+  actual toolchain versions and passed/skipped/failed runtime test counts.
 
 ### Corrected during review
 
@@ -33,4 +35,5 @@ No version has been tagged or published.
 - IDs can change after saving a new model; old copies are not updated.
 - Registration is not proof of existence, and a cache miss is not proof of absence.
 - Native ID lookups across SQLite container lifetimes failed in the tested cases.
-- iOS 17/macOS 14 runtimes, Swift compiler 6.0, and Xcode 26.6 remain unverified.
+- iOS 17/macOS 14 runtimes, Swift compiler 6.0, physical iOS hardware and Intel
+  execution remain unverified. Full hosted results are in `docs/GITHUB_CI.md`.

@@ -4,7 +4,7 @@ Model-typed identifiers for Apple's SwiftData. A small, independent Swift packag
 with no external dependencies, custom macros, or ORM layer.
 
 **0.1.0 has not been published.** The [repository](https://github.com/typage-labs/TypedSwiftData)
-is private while [GitHub CI validation](docs/GITHUB_CI.md) is in progress.
+is private; both jobs of [GitHub CI validation](docs/GITHUB_CI.md) passed.
 Public release readiness is tracked there. Publication requires
 human approval and completion of the [release checklist](docs/RELEASE_CHECKLIST.md).
 
@@ -83,15 +83,15 @@ or general existence guarantee is introduced here.
 ## Compatibility
 
 The manifest declares **Swift 6 language mode**, **iOS 17+**, and **macOS 14+**.
-The intended Xcode floor is 26.6; **Xcode 26.6 itself has not been verified**.
-The toolchain actually used is Xcode 27.1 / Apple Swift 6.4.
+Xcode 26.6 (Swift 6.3.3) and Xcode 27.2 RC (Swift 6.4.2) passed hosted CI;
+Xcode 27.1 (Swift 6.4) was also verified locally.
 
 | Evidence | Actually verified |
 | --- | --- |
-| Compilation | macOS SDKs 26.5 and 27.0 targeting macOS 14; iOS SDK 27.1 targeting iOS 17 |
-| Runtime tests | macOS 27.0.1; iOS simulators 18.5 and 27.0 |
-| Inheritance tests | macOS/iOS 27; gated to macOS/iOS 26+, excluded on iOS 18.5 |
-| Not verified | iOS 17/macOS 14 runtime; Swift compiler 6.0; Xcode 26.6; physical iOS hardware |
+| Compilation | macOS SDKs 26.5, 27.0 and 27.2 targeting macOS 14; iOS SDKs 26.5, 27.1 and 27.2 targeting iOS 17 |
+| Runtime tests | macOS 26.7.2 and 27.0.1; iOS simulators 18.5, 26.5, 27.0 and 27.1 |
+| Inheritance tests | macOS/iOS 26 and 27; gated to macOS/iOS 26+, explicitly skipped on iOS 18.5 |
+| Not verified | iOS 17/macOS 14 runtime; Swift compiler 6.0; physical iOS hardware; Intel execution |
 
 An old deployment target is not an old-runtime test. See the detailed
 [compatibility matrix](docs/COMPATIBILITY.md) and [final review](docs/RELEASE_REVIEW.md).
@@ -128,8 +128,8 @@ This runs strict Swift 6 tests, positive/negative client compilation, an actual
 iOS device build, native probes in isolated processes, and simulator tests. It
 selects an available recent iPhone simulator, or accepts
 `TYPED_SWIFTDATA_SIMULATOR=<UDID>`. It does not claim that this choice tests the
-oldest deployment target. Logs go to `.build/verification`, preserving committed
-historical evidence.
+oldest deployment target. Logs go to `.build/verification`; portable historical
+summaries are retained in the documentation.
 
 Individual checks:
 

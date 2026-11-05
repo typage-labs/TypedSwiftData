@@ -183,7 +183,8 @@ necessary to deliver the retained surface.
 
 Do not publish a claim of runtime validation for iOS 17 or macOS 14 until those
 systems are actually exercised. Compilation targeting them is recorded
-separately from runtime testing. Xcode 26.6 itself also remains untested here.
+separately from runtime testing. Xcode 26.6 and 27.2 RC passed the hosted checks
+recorded in [GitHub CI validation](GITHUB_CI.md).
 
 Recommendation: prepare a small 0.1.0 with the retained surface and these limits;
 do not add `existingModel` on the strength of the current results.

@@ -1,7 +1,7 @@
 # Candidate 0.1.0 — publication checklist
 
-Status: **NOT READY** pending the remaining conditions and hosted results in
-[GitHub CI validation](GITHUB_CI.md). The maintainer authorized private repository
+Status: **NOT READY** pending the remaining release conditions below. Both hosted
+jobs passed; see [GitHub CI validation](GITHUB_CI.md). The maintainer authorized private repository
 creation and CI validation. Public visibility, a version tag, and a GitHub
 Release still require separate approval.
 
@@ -23,10 +23,10 @@ Release still require separate approval.
 - [ ] Exercise memory, SQLite, actor, and native probes on the minimum advertised
   runtimes, **iOS 17 and macOS 14**, or explicitly revise the intended support
   policy and obtain maintainer acceptance of the remaining coverage gap.
-- [ ] Test **Xcode 26.6** before promoting it from an intended floor to a verified
-  toolchain. If Swift compiler 6.0 compatibility is advertised, actually test it;
-  `swift-tools-version: 6.0` and `-swift-version 6` alone do not establish that.
-- [ ] Run both jobs of the prepared
+- [x] Test **Xcode 26.6** before promoting it from an intended floor to a verified
+  toolchain: hosted Xcode 26.6 (17F113), Swift 6.3.3, passed. Swift compiler 6.0
+  compatibility remains unclaimed; language mode alone does not establish it.
+- [x] Run both jobs of the prepared
   workflow on the real GitHub runner. Confirm the selected Xcode, SDKs, runtime,
   tests, and uploaded evidence. Record actual results in the CI report.
 - [ ] Review the source provenance record and confirm the intended copyright
@@ -45,9 +45,9 @@ None of those operations is part of this task.
 
 ## Prepared GitHub metadata
 
-Suggested description:
+Configured description:
 
-> Model-typed SwiftData identifiers with Swift 6 concurrency checks and native API semantics.
+> Strongly typed model identifiers for Apple's SwiftData framework.
 
 Suggested topics: `swift`, `swiftdata`, `swift-package-manager`, `type-safety`,
 `phantom-types`, `concurrency`, `ios`, `macos`.
