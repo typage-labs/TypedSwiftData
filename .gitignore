@@ -1,0 +1,23 @@
+.build/
+.swiftpm/
+.DS_Store
+DerivedData/
+
+# Local diagnostics and verification artifacts (portable summaries stay in docs).
+docs/evidence/*
+!docs/evidence/README.md
+*.xcresult/
+*.xcactivitylog
+*.profraw
+*.profdata
+*.dia
+__pycache__/
+*.py[cod]
+
+# Xcode user state and local configuration.
+xcuserdata/
+*.xcuserstate
+.env
+.env.*
+!.env.example
+*.log

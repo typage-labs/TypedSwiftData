@@ -1,0 +1,41 @@
+name: Verify
+
+"on":
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  swiftdata:
+    name: Xcode ${{ matrix.xcode }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: xcode-27
+            xcode: "27"
+          - runner: macos-26
+            xcode: "26.6"
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    env:
+      TYPED_SWIFTDATA_EXPECTED_XCODE: ${{ matrix.xcode }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Select and verify requested Xcode
+        run: python3 Scripts/select_xcode.py --require "$TYPED_SWIFTDATA_EXPECTED_XCODE"
+      - name: Compile and test installed SDKs
+        run: bash Scripts/verify.sh
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: verification-xcode-${{ matrix.xcode }}
+          path: .build/verification/
+          include-hidden-files: true
+          if-no-files-found: warn
