@@ -50,10 +50,19 @@ steps = []
 if (directory / "steps.tsv").exists():
     steps = [{"step": line.split("\t")[0], "exit_code": int(line.split("\t")[1])}
              for line in (directory / "steps.tsv").read_text().splitlines()]
+sqlite_checks = {}
+for label in ["macos", "ios"]:
+    path = directory / f"sqlite-{label}" / "summary.json"
+    if path.exists():
+        result = json.loads(path.read_text())
+        sqlite_checks[label] = {"status": result["status"], "restart_processes": len(result["restart"]),
+                                "sqlite_integrity": result.get("sqlite_integrity"),
+                                "lifetime_controls": len(result["lifetime"]), "failures": result["failures"]}
 report = {"exit_code": args.exit_code, "xcode": log("xcode").strip(),
     "swift": log("swift").strip(), "host": log("host").strip(),
     "selected_simulator": load("simulator"), "macos_tests": testing("swift-tests"),
-    "ios_tests": testing("ios-tests"), "compilation": compilation, "steps": steps}
+    "ios_tests": testing("ios-tests"), "compilation": compilation,
+    "sqlite_checks": sqlite_checks, "steps": steps}
 (directory / "summary.json").write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))
 if os.environ.get("GITHUB_STEP_SUMMARY"):
@@ -61,3 +70,5 @@ if os.environ.get("GITHUB_STEP_SUMMARY"):
         output.write("## Observed verification results\n\n```json\n" + json.dumps(report, indent=2) + "\n```\n")
 if args.exit_code == 0 and any(report[key]["status"] != "passed" for key in ["macos_tests", "ios_tests"]):
     raise SystemExit("Successful command exits did not produce complete passing Swift Testing summaries.")
+if args.exit_code == 0 and any(sqlite_checks.get(label, {}).get("status") != "passed" for label in ["macos", "ios"]):
+    raise SystemExit("Missing or failed SQLite process-restart checks.")

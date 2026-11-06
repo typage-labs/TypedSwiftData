@@ -155,6 +155,13 @@ SwiftData identity/lookup anomaly, not a proven diagnosis of Apple's internals.
 No unsupported conversion of debug URLs or serialized identifiers is used to
 work around it.
 
+Later [process-restart validation](SQLITE_RUNTIME_VALIDATION.md) confirms that
+saved data and deletion survive separate processes on iOS 17.5, 18.5, 27.0,
+27.1 and macOS 27.0.1. Those checks read fresh IDs and do not serialize or
+reconstruct old ones. iOS 17.5 also retains a native container after model
+construction/save in the measured window; no deallocation deadline is part of
+this package's contract. Data persistence and ID portability remain distinct.
+
 Returning `nil` from an API named `existingModel` in that situation would confuse
 an unresolved identifier with an absent row. A registered-object fast path would
 also accept stale or pending-deleted objects. Property access on a placeholder

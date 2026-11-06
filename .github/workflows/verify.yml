@@ -29,7 +29,7 @@ jobs:
           persist-credentials: false
       - name: Select and verify requested Xcode
         run: python3 Scripts/select_xcode.py --require "$TYPED_SWIFTDATA_EXPECTED_XCODE"
-      - name: Compile and test installed SDKs
+      - name: Compile, test and verify SQLite process restarts
         run: bash Scripts/verify.sh
       - name: Preserve verification evidence
         if: always()

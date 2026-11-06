@@ -1,5 +1,10 @@
 # GitHub CI validation — 2026-11-05
 
+This is the historical hosted report. The subsequent
+[SQLite/runtime validation](SQLITE_RUNTIME_VALIDATION.md) adds local iOS 17.5
+coverage and revised persistence checks. Those changes have not been pushed;
+the hosted run links below do not validate them.
+
 The [private repository](https://github.com/typage-labs/TypedSwiftData) uses `main`
 and the description “Strongly typed model identifiers for Apple's SwiftData
 framework.” No remote README/license was generated; no tag or release was

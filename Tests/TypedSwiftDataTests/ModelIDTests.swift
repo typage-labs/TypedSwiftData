@@ -4,7 +4,11 @@ import Testing
 import TypedSwiftData
 
 @Suite @MainActor struct ModelIDTests {
-    @Test func equalityHashingAndRawValue() {
+    @Test func equalityHashingAndRawValue() throws {
+        // iOS 17.5 requires a container for this schema before constructing
+        // even an uninserted model. Keep this test independent of suite order.
+        let container = try makeContainer()
+        defer { withExtendedLifetime(container) {} }
         let restaurant = Restaurant(name: "R")
         let id = restaurant.typedID
         #expect(id.rawValue == restaurant.persistentModelID)

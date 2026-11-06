@@ -45,6 +45,7 @@ PY
 
 run_logged swift-tests swift test -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors
 run_logged harness-tests python3 Scripts/test_verification.py
+run_logged sqlite-macos python3 Scripts/check_sqlite_restart.py --label macos --lifetime
 run_logged compile-macos python3 Scripts/check_compilation.py --label macos
 run_logged compile-ios python3 Scripts/check_compilation.py --sdk iphoneos --target arm64-apple-ios17.0 --label ios
 run_logged ios-build xcodebuild -scheme TypedSwiftData -destination 'generic/platform=iOS' \
@@ -64,3 +65,7 @@ run_logged ios-tests xcodebuild -scheme TypedSwiftData-Package \
     -derivedDataPath .build/ci-simulator -parallel-testing-enabled NO \
     SWIFT_VERSION=6 SWIFT_STRICT_CONCURRENCY=complete SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
     IPHONEOS_DEPLOYMENT_TARGET=17.0 CODE_SIGNING_ALLOWED=NO test
+# Xcode may shut down a destination it booted itself when testing completes.
+run_logged sqlite-simulator-boot xcrun simctl bootstatus "$typed_swiftdata_simulator" -b
+run_logged sqlite-ios python3 Scripts/check_sqlite_restart.py \
+    --simulator "$typed_swiftdata_simulator" --label ios --lifetime

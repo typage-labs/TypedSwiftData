@@ -23,12 +23,17 @@ Release still require separate approval.
 - [ ] Exercise memory, SQLite, actor, and native probes on the minimum advertised
   runtimes, **iOS 17 and macOS 14**, or explicitly revise the intended support
   policy and obtain maintainer acceptance of the remaining coverage gap.
+  iOS **17.5** now passes the applicable suite and true SQLite process-restart
+  checks locally; iOS 17.0 and macOS 14 remain unverified. See the
+  [runtime report](SQLITE_RUNTIME_VALIDATION.md).
 - [x] Test **Xcode 26.6** before promoting it from an intended floor to a verified
   toolchain: hosted Xcode 26.6 (17F113), Swift 6.3.3, passed. Swift compiler 6.0
   compatibility remains unclaimed; language mode alone does not establish it.
 - [x] Run both jobs of the prepared
   workflow on the real GitHub runner. Confirm the selected Xcode, SDKs, runtime,
   tests, and uploaded evidence. Record actual results in the CI report.
+- [ ] After maintainer approval to commit/push, run hosted CI on the new SQLite
+  validation changes; only the earlier committed code has hosted results.
 - [ ] Review the source provenance record and confirm the intended copyright
   holder/contributor authorization. No third-party implementation is included.
 - [ ] Approve the documented scope: IDs are typed snapshots and registration is

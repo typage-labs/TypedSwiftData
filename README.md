@@ -89,12 +89,17 @@ Xcode 27.1 (Swift 6.4) was also verified locally.
 | Evidence | Actually verified |
 | --- | --- |
 | Compilation | macOS SDKs 26.5, 27.0 and 27.2 targeting macOS 14; iOS SDKs 26.5, 27.1 and 27.2 targeting iOS 17 |
-| Runtime tests | macOS 26.7.2 and 27.0.1; iOS simulators 18.5, 26.5, 27.0 and 27.1 |
-| Inheritance tests | macOS/iOS 26 and 27; gated to macOS/iOS 26+, explicitly skipped on iOS 18.5 |
-| Not verified | iOS 17/macOS 14 runtime; Swift compiler 6.0; physical iOS hardware; Intel execution |
+| Runtime tests | macOS 26.7.2 and 27.0.1; iOS simulators 17.5, 18.5, 26.5, 27.0 and 27.1 |
+| SQLite process restarts | Latest local checks passed on iOS 17.5, 18.5, 27.0, 27.1 and macOS 27.0.1 |
+| Inheritance tests | macOS/iOS 26 and 27; gated to macOS/iOS 26+, explicitly skipped on iOS 17.5/18.5 |
+| Not verified | iOS 17.0/macOS 14 runtime; other untested patch versions; Swift compiler 6.0; physical iOS hardware; Intel execution |
 
 An old deployment target is not an old-runtime test. See the detailed
 [compatibility matrix](docs/COMPATIBILITY.md) and [final review](docs/RELEASE_REVIEW.md).
+The [latest SQLite validation](docs/SQLITE_RUNTIME_VALIDATION.md) is local and
+has not yet been committed or run on hosted CI. Native container retention on
+iOS 17.5 does not prevent the tested saved data/deletions surviving process exit;
+the library promises no container deallocation timing.
 
 ## Installation
 
@@ -125,7 +130,8 @@ bash Scripts/verify.sh
 ```
 
 This runs strict Swift 6 tests, positive/negative client compilation, an actual
-iOS device build, native probes in isolated processes, and simulator tests. It
+iOS device build, native probes in isolated processes, simulator tests, and
+required SQLite checks across three separate processes on macOS and iOS. It
 selects an available recent iPhone simulator, or accepts
 `TYPED_SWIFTDATA_SIMULATOR=<UDID>`. It does not claim that this choice tests the
 oldest deployment target. Logs go to `.build/verification`; portable historical
@@ -139,6 +145,7 @@ python3 Scripts/check_compilation.py
 python3 Scripts/check_compilation.py --sdk iphoneos --target arm64-apple-ios17.0 --label ios
 swift build --product SwiftDataExperiments
 python3 Scripts/run_experiments.py
+python3 Scripts/check_sqlite_restart.py --label macos --lifetime
 ```
 
 Negative compilation checks require the intended diagnostic, file, and line;
@@ -146,6 +153,8 @@ an arbitrary failure never passes. Native probes include a deliberate SwiftData
 `SIGTRAP`, whose specific diagnostic is checked even in observation mode. Add
 `--verify-reference` to compare all recorded fields against the reference
 environments; a matched native anomaly is not evidence of correct resolution.
+The SQLite process check obtains fresh IDs in each process; it does not test
+ID serialization or promise that IDs remain meaningful across launches.
 
 The experimental logger can use `isTemporary` only when built with
 `-Xswiftc -DSDK_HAS_TEMPORARY_IDENTIFIER` against a 27 SDK, and only inside its

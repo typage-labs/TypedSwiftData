@@ -1,43 +1,76 @@
-# Compatibility evidence — 2026-11-05
+# Compatibility evidence — 2026-11-06
 
-Declared minimums and tested environments are separate. This matrix describes
-executed checks, not a promise that every intervening version behaves the same.
-The [GitHub CI report](GITHUB_CI.md) records exact builds, counts and run links;
-the [local release review](RELEASE_REVIEW.md) preserves earlier observations.
+Declared minimums and tested environments are separate. The latest local
+[SQLite/runtime validation](SQLITE_RUNTIME_VALIDATION.md) separates memory
+lifetime from persistence and records successful real process restarts. The
+[initial iOS 17.5 diagnosis](IOS17_RUNTIME_VALIDATION.md) preserves the earlier
+failure rather than relabeling it as a pass.
 
-| Environment | Xcode / Swift compiler | macOS runtime | iOS simulator runtime | Runtime results (macOS; iOS) |
+## Current local validation
+
+All rows below use **Xcode 27.1 (27A9275)** / Apple **Swift 6.4**
+(`swiftlang-6.4.0.34.1`), Swift 6 mode, complete concurrency and warnings as errors.
+
+| Actual runtime | Runtime tests: passed / skipped / failed | SQLite restart phases | Native memory controls |
+| --- | --- | --- | --- |
+| iOS **17.5 (21F79)** | **14 / 1 / 0** | **3 / 3 passed**, integrity `ok` | 6 completed; container retention recorded |
+| iOS **18.5 (22F77)** | **14 / 1 / 0** | **3 / 3 passed**, integrity `ok` | 6 completed |
+| iOS **27.0 (24A434)** | **15 / 0 / 0** | **3 / 3 passed**, integrity `ok` | 6 completed |
+| iOS **27.1 (24A94425)** | **15 / 0 / 0** | **3 / 3 passed**, integrity `ok` | 6 completed |
+| macOS **27.0.1 (26A434)** | **15 / 0 / 0** | **3 / 3 passed**, integrity `ok` | 6 completed |
+
+The one skip on iOS 17.5/18.5 is the existing inheritance test requiring iOS 26.
+The other tests actually execute, including SQLite and actor transmission.
+Three separate processes save data, read/delete it, and verify persisted deletion;
+this is additional coverage, not a renaming of two simultaneous containers.
+
+The earlier iOS 17.5 result was 13 passed / 1 failed / 1 skipped after fixing the
+model-construction fixture. The remaining assertion required native container
+deallocation within about one second. Native-only controls reproduced retention
+with no caller-owned model, context or ID, and persistence after process exit
+passed. The test now checks functional behavior across containers; the memory
+diagnostic and true-restart check are separate. No timeout increase or broad
+skip was used to turn that failure into success.
+
+## Earlier hosted coverage
+
+The [GitHub CI report](GITHUB_CI.md) records the earlier committed code, exact run
+links and artifacts. The new SQLite checks have **not** been pushed or executed
+on GitHub Actions, or tested with the older Xcode 26.6 compiler locally.
+
+| Hosted runner | Xcode / Swift | macOS runtime | iOS simulator | Runtime results |
 | --- | --- | --- | --- | --- |
-| GitHub `xcode-27` | 27.2 RC (27B48) / 6.4.2 (`swiftlang-6.4.2.1.9`) | 27.0.1 (26A434) | 27.1 (24A94425) | 15 passed; 15 passed; no skips/failures |
-| GitHub `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.7.2 (25G332) | 26.5 (23F77) | 15 passed; 15 passed; no skips/failures |
-| Local review | 27.1 (27A9275) / 6.4 (`swiftlang-6.4.0.34.1`) | 27.0.1 (26A434) | 27.0 (24A434) | 15 passed; 15 passed; no skips/failures |
-| Local older simulator | 27.1 (27A9275) / 6.4 | Same local host | 18.5 (22F77) | iOS: 14 passed, 1 explicit inheritance skip, 0 failed |
+| `xcode-27` | 27.2 RC (27B48) / 6.4.2 (`swiftlang-6.4.2.1.9`) | 27.0.1 (26A434) | 27.1 (24A94425) | 15 macOS + 15 iOS passed; no skips/failures |
+| `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.7.2 (25G332) | 26.5 (23F77) | 15 macOS + 15 iOS passed; no skips/failures |
+
+## Limits of each kind of evidence
 
 | Dimension | Actual coverage | What it does not prove |
 | --- | --- | --- |
-| Swift language | Swift 6 mode; complete concurrency checks; compiler warnings treated as errors | Execution with the Swift 6.0 compiler |
-| Xcode | Complete hosted runs on 26.6 and 27.2 RC; local 27.1 | Every intermediate toolchain version |
-| macOS SDKs | 26.5 with Xcode 26.6; 27.0 locally; 27.2 with Xcode 27.2 RC | Runtime behavior of the deployment minimum |
-| macOS compilation | arm64 targeting macOS 14.0; positive and diagnostic-checked negative fixtures | Running on macOS 14; Intel execution |
-| iOS SDKs / device builds | 26.5, 27.1, 27.2; `arm64-apple-ios17.0`; actual generic device builds succeeded | Physical device execution or iOS 17 runtime behavior |
-| Runtime suites | Memory, SQLite, actor and type-shape tests on the environments above | iOS 17 / macOS 14 runtime coverage |
-| Model inheritance | Availability guards; executed on hosted macOS 26/27 and iOS 26/27; explicit skip on iOS 18.5 | Inheritance on systems before iOS/macOS 26 |
-| Native probes | 15 isolated macOS probes per hosted job; no unexpected failures; one checked deliberate trap each | Correctness of all SwiftData lookups; hosted iOS execution of the complete probe program |
-| Compiler diagnostics | 3 positive and 10 negative fixtures per SDK on both hosted toolchains; same primary error messages as local | Any compilation error being an acceptable rejection |
-| Harness regression | One regression test passed per job, checking that failed probes fail observation mode | Arbitrary native failures being safe to ignore |
-| Historical standalone SDK comparison | SDK 26.5 fixtures with Xcode 27.1's macro plugin also passed | An independent older toolchain; that gap is now covered separately by hosted Xcode 26.6 |
+| Swift language | Swift 6 mode, complete concurrency, warnings as errors | Execution with the Swift 6.0 compiler |
+| Compiler/toolchain | Latest changes: local 27.1; previous committed code: hosted 26.6 and 27.2 RC | Every intermediate toolchain; hosted validation of uncommitted changes |
+| macOS SDKs | 27.0 locally; earlier 26.5/27.2 hosted; arm64 target macOS 14.0 | macOS 14 runtime; Intel execution |
+| iOS SDK/device builds | 27.1 locally; earlier 26.5/27.2 hosted; arm64 target iOS 17.0 | iOS 17.0 runtime or physical device execution |
+| Compiler fixtures | Latest local run: 3 positive + 10 diagnostic-checked negative per macOS/iOS SDK | Any nonzero compiler exit being acceptable |
+| Runtime suite | Memory, SQLite, actors, generic use; inheritance only where available | Every patch release or application schema |
+| Process restart | Exact saved values and deletions verified after process exit on all current rows | Portable ModelID values, UIKit lifecycle, migrations, abrupt-crash/power-loss durability |
+| Memory lifecycle | Six native-only controls per runtime; retention after construction/save on 17.5; unsaved insertion retained on all rows | A guaranteed release deadline, or proof of a permanent leak |
+| Harness checks | 4 Python regressions; real reader rejects absent saved data; complete local verification entry point passed | Arbitrary native failures being safe to ignore |
+| Original native experiments | 15 macOS probes passed their process checks, including one specific deliberate trap | Correctness of all native SwiftData lookups |
+| Historical standalone SDK comparison | SDK 26.5 fixtures with Xcode 27.1's macro plugin passed before hosted validation | An independent older toolchain by themselves |
 
-`swift-tools-version: 6.0` declares the manifest tools version;
-`swiftLanguageModes: [.v6]` declares the language mode. Neither is a record of
-running the Swift 6.0 toolchain. The package's `.iOS(.v17)` / `.macOS(.v14)`
-platform declarations are deployment targets, not test results.
+`swift-tools-version: 6.0` and `swiftLanguageModes: [.v6]` describe tools/language
+requirements, not execution with the Swift 6.0 compiler. The package's iOS 17 /
+macOS 14 declarations are deployment targets. Only the exact runtimes above
+have execution evidence.
 
-`PersistentIdentifier.isTemporary` is available starting with iOS/macOS 27 in
-the inspected SDK. Production code does not reference it. Optional experimental
-use has a compile flag and runtime availability check; neither CI job enables
-that optional logger. This does not skip a runtime test or claim older-system
-availability of that API.
+Production code does not use `PersistentIdentifier.isTemporary`. Its optional
+experimental use remains guarded by both a compile flag and iOS/macOS 27
+availability; none of the new restart/lifetime probes uses it.
 
-No iOS 17 runtime or macOS 14 host was available in these executions. No runtime
-download, Xcode installation, SDK modification or unsupported backport was
-performed. The publication checklist still requires minimum-runtime coverage
-or explicit maintainer acceptance of a revised support policy before 0.1.0.
+**iOS 17.5 is validated for the exercised current API scenarios.** iOS 17.0,
+other untested patch versions, macOS 14, physical iOS hardware and Intel remain
+unverified. Native identifier equality/resolution across containers or launches
+is still not guaranteed. `existingModel`, Codable and public raw constructors
+remain excluded. The release checklist's broader minimum-runtime condition is
+not fully satisfied, and no publication is implied by this local validation.

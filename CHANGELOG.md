@@ -16,6 +16,8 @@ No version has been tagged or published.
   and a GitHub verification workflow validated on Xcode 26.6 and 27.2 RC.
 - Explicit Xcode/simulator selection, private CI artifacts and summaries with
   actual toolchain versions and passed/skipped/failed runtime test counts.
+- Separate SQLite process-restart checks and native-only memory diagnostics,
+  validated locally on iOS 17.5, 18.5, 27.0, 27.1 and macOS 27.0.1.
 
 ### Corrected during review
 
@@ -24,6 +26,9 @@ No version has been tagged or published.
 - Verification output no longer overwrites recorded evidence by default.
 - Documentation distinguishes static type association, native behavior,
   experimental limitations, and potential framework anomalies.
+- The equality fixture initializes its model container before creating models
+  on iOS 17.5. SQLite tests separate functional persistence from an unsupported
+  container release deadline; live database files are no longer unlinked.
 
 ### Deliberately excluded
 
@@ -35,5 +40,5 @@ No version has been tagged or published.
 - IDs can change after saving a new model; old copies are not updated.
 - Registration is not proof of existence, and a cache miss is not proof of absence.
 - Native ID lookups across SQLite container lifetimes failed in the tested cases.
-- iOS 17/macOS 14 runtimes, Swift compiler 6.0, physical iOS hardware and Intel
+- iOS 17.0/macOS 14 runtimes, Swift compiler 6.0, physical iOS hardware and Intel
   execution remain unverified. Full hosted results are in `docs/GITHUB_CI.md`.
