@@ -2,8 +2,10 @@
 
 This is the preserved **phase 1** record. The subsequent [final review](RELEASE_REVIEW.md)
 contains the updated test inventory, clean-checkout run, classification of native
-observations, and publication verdict. Its [compatibility matrix](COMPATIBILITY.md)
-separates SDK compilation from runtime/compiler/Xcode coverage.
+observations, and its historical publication verdict. The current
+[compatibility matrix](COMPATIBILITY.md) separates SDK compilation from
+runtime/compiler/Xcode coverage; current release information is in the
+[README](../README.md). Statements below describe the phase 1 checkpoint.
 
 Executed on **2026-11-05**, Europe/Paris. This report distinguishes compilation,
 runtime assertions, and native observations. No GitHub repository, push, tag, or
@@ -262,4 +264,4 @@ experiments; runtime claims above come from executed probes.
 model association and Sendable identifier transport while preserving native
 behavior. Keep `existingModel` excluded, state the container-lifetime limitations,
 and verify the oldest supported runtimes before claiming runtime coverage for
-the complete deployment range. Nothing has been published.
+the complete deployment range. Nothing had been published at that checkpoint.

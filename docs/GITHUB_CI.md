@@ -1,9 +1,11 @@
-# Final GitHub CI validation — 2026-11-06
+# Prepublication GitHub CI evidence — 2026-11-06
 
-**Both hosted jobs passed the revised tests and SQLite process checks.** The
-[repository](https://github.com/typage-labs/TypedSwiftData) remains **private**,
-with `main` as its default branch. No tag, GitHub Release or publication was
-created. The four public API elements and package manifest are unchanged from
+**Both hosted jobs passed the revised tests and SQLite process checks.** This
+report preserves the prepublication validation, when the repository was private
+and no tag or release had been created. Current publication information is in
+the [README](../README.md) and
+[0.1.0 release](https://github.com/typage-labs/TypedSwiftData/releases/tag/0.1.0).
+The four public API elements and package manifest are unchanged from
 `7672530a2be0116a4d378d4dd0e83e8a6a70e154`.
 
 ## Audited code and observed execution
@@ -14,12 +16,19 @@ The integration commit is
 passed both jobs on its first attempt. No follow-up code/test adjustment or
 rerun was needed to obtain those CI results.
 
-The tables below record that code-validation run. The documentation follow-up
-records these observations and is also subject to the complete workflow; its
-own run is available in the
-[workflow history on main](https://github.com/typage-labs/TypedSwiftData/actions/workflows/verify.yml).
-The final handoff verifies that the latest pushed commit's own two jobs are
-green, rather than relying on the parent commit's result.
+The tables below record that code-validation run. Its documentation follow-up,
+commit `902151e29593c51a47dc60cb6fa2be6dd0456b5a`, also passed both jobs in
+[run 42241578792](https://github.com/typage-labs/TypedSwiftData/actions/runs/42241578792).
+That run used the same toolchains and iOS runtimes; the Xcode 26.6 runner used
+macOS **26.7.2 (25G332)**, image revision `20261102.0473.1`, and an iPhone 17e.
+All runtime, compiler, Python, native-probe and SQLite check counts matched the
+tables below. Each SQLite batch again used three distinct processes and verified
+its stored nonce, deletion, Customer sentinel and SQLite integrity.
+
+The separate release-documentation commit must pass its own complete workflow
+before receiving tag `0.1.0`. Its branch and tag runs are available in the
+[workflow history](https://github.com/typage-labs/TypedSwiftData/actions/workflows/verify.yml).
+The earlier runs are evidence, not substitutes for that release-commit check.
 
 | Observed property | Job A | Job B |
 | --- | --- | --- |
@@ -117,17 +126,18 @@ the existing Apache 2.0 license remain present. The workflow retains
 `if: always()`. It verifies Xcode versions and installed simulators; there is
 no hardcoded simulator model or publishing step.
 
-The private artifacts `verification-xcode-27` and `verification-xcode-26.6`
+The artifacts `verification-xcode-27` and `verification-xcode-26.6`
 contain version records, test counts/logs, compiler diagnostics, step exits,
 SQLite phase evidence and native observations. The earlier pre-SQLite hosted
 validation is preserved in
 [run 42113100885](https://github.com/typage-labs/TypedSwiftData/actions/runs/42113100885).
 
-## Technical readiness
+## Prepublication verdict
 
-**READY FOR PUBLIC RELEASE**, subject to the maintainer's separate publication
-decision. No demonstrated API defect, unexplained test failure, missing required
+The verdict was **READY FOR PUBLIC RELEASE**, subject to a separate maintainer
+publication decision. No demonstrated API defect, unexplained test failure, missing required
 CI check or artifact leak remains in this review. The explicit coverage limits
 above remain part of the release documentation; readiness is not a claim that
-unexecuted runtimes have been validated. No public visibility change, tag or
-GitHub Release is performed by this task.
+unexecuted runtimes have been validated. The maintainer subsequently authorized
+publication, conditional on validating the release-documentation commit. The
+[release process](RELEASE_CHECKLIST.md) records that authorization and the checks.

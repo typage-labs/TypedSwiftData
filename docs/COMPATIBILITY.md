@@ -42,7 +42,12 @@ native lifetime diagnostics ran on macOS and iOS in **both** hosted jobs. Xcode
 | Hosted runner | Xcode / Swift | macOS runtime | iOS simulator | Runtime results |
 | --- | --- | --- | --- | --- |
 | `xcode-27` | 27.2 (27B52) / 6.4.2 (`swiftlang-6.4.2.1.9`) | 27.0.1 (26A434) | 27.2 (24B8117) | 15 macOS + 15 iOS passed; no skips/failures; 3 restart phases passed per runtime |
-| `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.6.2 (25G83) | 26.5 (23F77) | 15 macOS + 15 iOS passed; no skips/failures; 3 restart phases passed per runtime |
+| `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.6.2 (25G83), then 26.7.2 (25G332) | 26.5 (23F77) | Each run: 15 macOS + 15 iOS passed; no skips/failures; 3 restart phases passed per runtime |
+
+The macOS host variation is recorded in runs
+[42239504551](https://github.com/typage-labs/TypedSwiftData/actions/runs/42239504551)
+and [42241578792](https://github.com/typage-labs/TypedSwiftData/actions/runs/42241578792).
+Their results are identical; the runner label does not pin the macOS patch version.
 
 ## Limits of each kind of evidence
 
@@ -74,5 +79,5 @@ other untested patch versions, macOS 14, physical iOS hardware and Intel remain
 unverified. Native identifier equality/resolution across containers or launches
 is still not guaranteed. `existingModel`, Codable and public raw constructors
 remain excluded. These coverage gaps and semantic limits remain explicit in
-the release documentation. Technical readiness does not validate unexecuted
-runtimes, and publication still requires the maintainer's separate approval.
+the release documentation. Publication does not validate unexecuted runtimes
+or expand these guarantees.

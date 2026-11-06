@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased — candidate 0.1.0
+## 0.1.0 — 2026-11-06
 
-No version has been tagged or published.
+First public release by Typage Labs.
 
 ### Added
 
@@ -14,7 +14,7 @@ No version has been tagged or published.
   memory/SQLite/actor tests, and isolated native SwiftData probes.
 - Protocol and availability-gated inheritance validation, compatibility evidence,
   and a GitHub verification workflow validated on Xcode 26.6 and 27.2.
-- Explicit Xcode/simulator selection, private CI artifacts and summaries with
+- Explicit Xcode/simulator selection, CI artifacts and summaries with
   actual toolchain versions and passed/skipped/failed runtime test counts.
 - Separate SQLite process-restart checks and native-only memory diagnostics,
   validated locally on iOS 17.5, 18.5, 27.0, 27.1 and macOS 27.0.1.

@@ -10,7 +10,7 @@ Links labeled "local evidence" in historical reports point here rather than to
 files that would be missing from a clean checkout.
 
 Run `bash Scripts/verify.sh` to generate fresh evidence under
-`.build/verification`. Each GitHub job uploads that directory as its own private
+`.build/verification`. Each GitHub job uploads that directory as its own
 workflow artifact. Hosted results must be read from the corresponding run;
 older local results are not substituted for them.
 

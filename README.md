@@ -3,10 +3,9 @@
 Model-typed identifiers for Apple's SwiftData. A small, independent Swift package
 with no external dependencies, custom macros, or ORM layer.
 
-**0.1.0 has not been published.** The [repository](https://github.com/typage-labs/TypedSwiftData)
-is private; both jobs of [GitHub CI validation](docs/GITHUB_CI.md) passed.
-Public release readiness is tracked there. Publication requires
-human approval and completion of the [release checklist](docs/RELEASE_CHECKLIST.md).
+**[TypedSwiftData 0.1.0](https://github.com/typage-labs/TypedSwiftData/releases/tag/0.1.0)**
+is the first public release by Typage Labs. See the [changelog](CHANGELOG.md)
+and [compatibility evidence](docs/COMPATIBILITY.md) for its verified scope.
 
 ```swift
 import SwiftData
@@ -89,7 +88,7 @@ Xcode 27.1 (Swift 6.4) was also verified locally.
 | Evidence | Actually verified |
 | --- | --- |
 | Compilation | macOS SDKs 26.5, 27.0 and 27.2 targeting macOS 14; iOS SDKs 26.5, 27.1 and 27.2 targeting iOS 17 |
-| Runtime tests | Latest local/CI runs: macOS 26.6.2 and 27.0.1; iOS simulators 17.5, 18.5, 26.5, 27.0, 27.1 and 27.2 |
+| Runtime tests | Latest local/CI runs: macOS 26.6.2, 26.7.2 and 27.0.1; iOS simulators 17.5, 18.5, 26.5, 27.0, 27.1 and 27.2 |
 | SQLite process restarts | Three phases passed on every runtime in the row above, including both GitHub jobs |
 | Inheritance tests | macOS/iOS 26 and 27; gated to macOS/iOS 26+, explicitly skipped on iOS 17.5/18.5 |
 | Not verified | iOS 17.0/macOS 14 runtime; other untested patch versions; Swift compiler 6.0; physical iOS hardware; Intel execution |
@@ -103,23 +102,18 @@ the library promises no container deallocation timing.
 
 ## Installation
 
-For local evaluation, add this directory as a local package in Xcode. In another
-package, add this dependency and product to the corresponding manifest arrays:
+Add the public package and its library product to your package manifest:
 
 ```swift
 // dependencies:
-.package(path: "../TypedSwiftData")
+.package(url: "https://github.com/typage-labs/TypedSwiftData.git", exact: "0.1.0")
 
 // your target's dependencies:
 .product(name: "TypedSwiftData", package: "TypedSwiftData")
 ```
 
-Authorized collaborators can evaluate the private repository's `main` branch
-after authenticating with GitHub:
-
-```swift
-.package(url: "https://github.com/typage-labs/TypedSwiftData.git", branch: "main")
-```
+In Xcode, add `https://github.com/typage-labs/TypedSwiftData.git` as a package
+dependency and select version `0.1.0`.
 
 ## Verification
 
@@ -159,9 +153,6 @@ ID serialization or promise that IDs remain meaningful across launches.
 The experimental logger can use `isTemporary` only when built with
 `-Xswiftc -DSDK_HAS_TEMPORARY_IDENTIFIER` against a 27 SDK, and only inside its
 runtime availability guard. Production code does not use that property.
-
-There is no `0.1.0` tag to resolve. A version-based dependency can be documented
-after a separately approved release.
 
 The two GitHub jobs use the same script with explicitly selected Xcode 27 and
 26.6. See [observed CI results](docs/GITHUB_CI.md) and

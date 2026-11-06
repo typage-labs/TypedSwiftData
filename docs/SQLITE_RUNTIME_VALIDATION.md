@@ -9,8 +9,9 @@ persistence was incorrect. No public TypedSwiftData API was changed.
 The initial failure and earlier evidence remain in
 [the original iOS 17 diagnosis](IOS17_RUNTIME_VALIDATION.md). All results below
 were captured locally before submitting the changes to GitHub. The subsequent
-[CI report](GITHUB_CI.md) records hosted validation separately; no public release
-is implied by either stage.
+[CI report](GITHUB_CI.md) records hosted validation separately. Publication
+information is maintained in the [README](../README.md); this report preserves
+the experimental evidence from the local validation stage.
 
 ## Audit of the original failing test
 

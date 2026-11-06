@@ -1,8 +1,9 @@
 # Final review before 0.1.0
 
 Historical prepublication review, before private GitHub repository creation.
-See [GitHub CI validation](GITHUB_CI.md) for the subsequent hosted results and
-current release-readiness assessment. This record is retained as local evidence.
+See [GitHub CI validation](GITHUB_CI.md) for subsequent hosted results and
+the [README](../README.md) for current release information. This record preserves
+the findings and outstanding conditions as they stood at that earlier checkpoint.
 
 Review date: **2026-11-05**. Verdict: **NOT READY** for publication. The retained
 API is useful and the local implementation checks pass; minimum-runtime and

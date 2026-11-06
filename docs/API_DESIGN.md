@@ -1,11 +1,12 @@
-# API design — candidate 0.1.0
+# API design — 0.1.0
 
 Decision date: 2026-11-05. Scope: a model-type association around SwiftData's
 identifier, not a persistence abstraction. This package is independent of
 TypedCoreData.
 
-The [final review](RELEASE_REVIEW.md) adds protocol/inheritance checks and release
-conditions. Production signatures remain unchanged from phase 1.
+The [historical review](RELEASE_REVIEW.md) adds protocol/inheritance checks.
+Production signatures remain unchanged from phase 1. Current installation and
+release information is in the [README](../README.md).
 
 ## Compiled public surface
 
@@ -176,7 +177,7 @@ is **not** counted as proof of rejecting a model-type mismatch. The separate
 `registeredModel`, fetch-result, and ID-assignment fixtures verify those type
 errors against implemented APIs.
 
-## Candidate 0.1.0 scope
+## 0.1.0 scope
 
 Retain `ModelID`, `typedID`, `fetchTypedIdentifiers`, and typed
 `registeredModel(for:)`. Their value is compiler-checked model association,
@@ -188,10 +189,10 @@ RawRepresentable, public raw constructors, permanent-ID claims, store validators
 identifier remapping, batch-fetch wrappers, custom macros, and an ORM. None is
 necessary to deliver the retained surface.
 
-Do not publish a claim of runtime validation for iOS 17 or macOS 14 until those
+Do not publish a claim of runtime validation for iOS 17.0 or macOS 14 until those
 systems are actually exercised. Compilation targeting them is recorded
 separately from runtime testing. Xcode 26.6 and 27.2 passed the hosted checks
 recorded in [GitHub CI validation](GITHUB_CI.md).
 
-Recommendation: prepare a small 0.1.0 with the retained surface and these limits;
-do not add `existingModel` on the strength of the current results.
+Version 0.1.0 retains this small surface and these limits; the current results
+do not justify adding `existingModel`.
