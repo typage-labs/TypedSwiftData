@@ -8,8 +8,9 @@ persistence was incorrect. No public TypedSwiftData API was changed.
 
 The initial failure and earlier evidence remain in
 [the original iOS 17 diagnosis](IOS17_RUNTIME_VALIDATION.md). All results below
-were executed locally with the uncommitted changes. No commit, push or release
-was made; the existing hosted CI results concern the earlier implementation.
+were captured locally before submitting the changes to GitHub. The subsequent
+[CI report](GITHUB_CI.md) records hosted validation separately; no public release
+is implied by either stage.
 
 ## Audit of the original failing test
 
@@ -186,4 +187,5 @@ This is process-level persistence validation with bundled command-line clients
 or power-loss durability test. It does not serialize IDs or retest cross-launch
 ID equality. iOS **17.0**, other untested patch versions, **macOS 14**, physical
 iOS devices, Intel execution and the Swift 6.0 compiler remain unverified.
-The new validation changes have not been committed or run on hosted CI.
+Subsequent hosted results and release readiness are recorded in the
+[GitHub CI report](GITHUB_CI.md).

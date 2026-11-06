@@ -83,21 +83,21 @@ or general existence guarantee is introduced here.
 ## Compatibility
 
 The manifest declares **Swift 6 language mode**, **iOS 17+**, and **macOS 14+**.
-Xcode 26.6 (Swift 6.3.3) and Xcode 27.2 RC (Swift 6.4.2) passed hosted CI;
+Xcode 26.6 (Swift 6.3.3) and Xcode 27.2 (Swift 6.4.2) passed hosted CI;
 Xcode 27.1 (Swift 6.4) was also verified locally.
 
 | Evidence | Actually verified |
 | --- | --- |
 | Compilation | macOS SDKs 26.5, 27.0 and 27.2 targeting macOS 14; iOS SDKs 26.5, 27.1 and 27.2 targeting iOS 17 |
-| Runtime tests | macOS 26.7.2 and 27.0.1; iOS simulators 17.5, 18.5, 26.5, 27.0 and 27.1 |
-| SQLite process restarts | Latest local checks passed on iOS 17.5, 18.5, 27.0, 27.1 and macOS 27.0.1 |
+| Runtime tests | Latest local/CI runs: macOS 26.6.2 and 27.0.1; iOS simulators 17.5, 18.5, 26.5, 27.0, 27.1 and 27.2 |
+| SQLite process restarts | Three phases passed on every runtime in the row above, including both GitHub jobs |
 | Inheritance tests | macOS/iOS 26 and 27; gated to macOS/iOS 26+, explicitly skipped on iOS 17.5/18.5 |
 | Not verified | iOS 17.0/macOS 14 runtime; other untested patch versions; Swift compiler 6.0; physical iOS hardware; Intel execution |
 
 An old deployment target is not an old-runtime test. See the detailed
 [compatibility matrix](docs/COMPATIBILITY.md) and [final review](docs/RELEASE_REVIEW.md).
-The [latest SQLite validation](docs/SQLITE_RUNTIME_VALIDATION.md) is local and
-has not yet been committed or run on hosted CI. Native container retention on
+The [SQLite validation](docs/SQLITE_RUNTIME_VALIDATION.md) records local tests;
+the [CI report](docs/GITHUB_CI.md) records hosted executions. Native container retention on
 iOS 17.5 does not prevent the tested saved data/deletions surviving process exit;
 the library promises no container deallocation timing.
 

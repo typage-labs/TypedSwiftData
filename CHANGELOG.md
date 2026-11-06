@@ -13,11 +13,13 @@ No version has been tagged or published.
 - Swift 6 compilation checks, negative fixtures checking their diagnostics,
   memory/SQLite/actor tests, and isolated native SwiftData probes.
 - Protocol and availability-gated inheritance validation, compatibility evidence,
-  and a GitHub verification workflow validated on Xcode 26.6 and 27.2 RC.
+  and a GitHub verification workflow validated on Xcode 26.6 and 27.2.
 - Explicit Xcode/simulator selection, private CI artifacts and summaries with
   actual toolchain versions and passed/skipped/failed runtime test counts.
 - Separate SQLite process-restart checks and native-only memory diagnostics,
   validated locally on iOS 17.5, 18.5, 27.0, 27.1 and macOS 27.0.1.
+- Hosted SQLite restart checks passed on Xcode 26.6 and 27.2 for their macOS
+  hosts and installed iOS simulators; exact versions/counts are in the CI report.
 
 ### Corrected during review
 

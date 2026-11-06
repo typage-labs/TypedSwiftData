@@ -1,86 +1,63 @@
-# Candidate 0.1.0 — publication checklist
+# Candidate 0.1.0 — release checklist
 
-Status: **NOT READY** pending the remaining release conditions below. Both hosted
-jobs passed; see [GitHub CI validation](GITHUB_CI.md). The maintainer authorized private repository
-creation and CI validation. Public visibility, a version tag, and a GitHub
-Release still require separate approval.
+Technical status: **READY FOR PUBLIC RELEASE**, with evidence in the
+[CI report](GITHUB_CI.md). The maintainer authorized committing and pushing to
+the private repository. Public visibility, a version tag and a GitHub Release
+remain separate human decisions and are not authorized by this validation task.
 
-## Prepared locally
+## Technical checks
 
-- [x] Four-element API reviewed without adding production functionality.
-- [x] Internal constructor, immutable value, no Codable or raw public factory.
-- [x] Native behavior and lack of existence/permanence/container guarantees explained.
-- [x] Before/after examples checked by positive and negative compilation fixtures.
-- [x] Protocol and inherited-model coverage added with availability gates.
-- [x] Local install instructions and explicitly prospective remote instructions.
-- [x] [Changelog](../CHANGELOG.md), [compatibility matrix](COMPATIBILITY.md),
-  [review](RELEASE_REVIEW.md), and original [evidence](IMPLEMENTATION_VERIFICATION.md).
-- [x] Canonical Apache 2.0 license and implementation provenance reviewed.
-- [x] Local CI entry point and GitHub workflow prepared; no publishing steps.
+- [x] Four public API elements unchanged from the reviewed implementation.
+- [x] Internal constructor, immutable raw value, no Codable or public raw factory.
+- [x] Native semantics preserved; no existence, permanence or store guarantee.
+- [x] iOS 17.5 model-construction fixture corrected without changing production code.
+- [x] Memory lifetime separated from SQLite persistence; native retention recorded.
+- [x] Real writer, reader/deleter and final reader processes verify stored data,
+  deletion and an unrelated data sentinel. Process failures remain fatal.
+- [x] Local complete verification passed, including iOS 17.5 runtime execution,
+  explicit inheritance availability skip, macOS tests and compiler diagnostics.
+- [x] Revised tests and process checks passed both hosted Xcode jobs; inspect
+  artifacts and record actual versions/counts on the pushed code.
+- [x] Required package files and canonical Apache 2.0 license present; no external
+  dependency, imported third-party implementation or custom Swift macro added.
+- [x] Generated stores, binaries, raw logs, result bundles and personal files
+  excluded from Git. Production source hashes unchanged.
+- [x] Repository private, branch `main`, normal push only; workflow permissions
+  `contents: read`, no publishing or release step.
 
-## Conditions still to satisfy
+## Coverage limits to retain in the release documentation
 
-- [ ] Exercise memory, SQLite, actor, and native probes on the minimum advertised
-  runtimes, **iOS 17 and macOS 14**, or explicitly revise the intended support
-  policy and obtain maintainer acceptance of the remaining coverage gap.
-  iOS **17.5** now passes the applicable suite and true SQLite process-restart
-  checks locally; iOS 17.0 and macOS 14 remain unverified. See the
-  [runtime report](SQLITE_RUNTIME_VALIDATION.md).
-- [x] Test **Xcode 26.6** before promoting it from an intended floor to a verified
-  toolchain: hosted Xcode 26.6 (17F113), Swift 6.3.3, passed. Swift compiler 6.0
-  compatibility remains unclaimed; language mode alone does not establish it.
-- [x] Run both jobs of the prepared
-  workflow on the real GitHub runner. Confirm the selected Xcode, SDKs, runtime,
-  tests, and uploaded evidence. Record actual results in the CI report.
-- [ ] After maintainer approval to commit/push, run hosted CI on the new SQLite
-  validation changes; only the earlier committed code has hosted results.
-- [ ] Review the source provenance record and confirm the intended copyright
-  holder/contributor authorization. No third-party implementation is included.
-- [ ] Approve the documented scope: IDs are typed snapshots and registration is
-  a native cache lookup. Keep `existingModel` excluded.
-- [ ] Review the final diff, public declarations, changelog, and compatibility
-  wording on the exact commit intended for release.
-- [x] Verify `typage-labs/TypedSwiftData` exists with PRIVATE visibility and the
-  intended description. No unavailable version is advertised as released.
-- [ ] Obtain explicit human approval for the later publication operation.
+The manifest declares deployment targets iOS 17/macOS 14. The compatibility
+matrix names only actually executed runtimes: iOS 17.5 is verified; **iOS 17.0
+and macOS 14 are not**. Other untested patch versions, physical devices, Intel
+execution and the Swift 6.0 compiler also remain unverified. A deployment-target
+compilation does not fill these runtime coverage gaps.
 
-Only after approval: finalize the version entry, create the release commit/tag
-according to the maintainer's process, check remote SPM resolution, and publish.
-None of those operations is part of this task.
+SQLite data persistence across normal process termination is verified separately
+from identifier stability. `PersistentIdentifier` equality/resolution between
+containers or processes is not guaranteed. Native container retention on iOS
+17.5 is observed, without establishing a permanent leak. Abrupt-crash/power-loss
+durability, migrations and UIKit lifecycle coverage are not claimed.
 
-## Prepared GitHub metadata
+These are disclosed evidence limits, not failing tests or demonstrated API
+defects. Technical readiness does not imply that every declared deployment
+version has been exercised. The maintainer's publication decision must retain
+these distinctions; no broader compatibility guarantee is authorized here.
 
-Configured description:
+## Human publication decision
+
+- [ ] Review the final commit, changelog, documented API scope and compatibility
+  limits, and approve publication explicitly.
+- [ ] Only after that separate approval: perform the requested visibility/tag/
+  release operations and verify version-based SwiftPM resolution.
+
+No tag or release exists yet; `0.1.0` remains a candidate. The current private
+repository description is:
 
 > Strongly typed model identifiers for Apple's SwiftData framework.
 
-Suggested topics: `swift`, `swiftdata`, `swift-package-manager`, `type-safety`,
-`phantom-types`, `concurrency`, `ios`, `macos`.
-
-Do not describe the package as a durable identity system, existence resolver,
-cross-store ID solution, or a new invention of typed identifiers.
-
-## CI scope
-
-[verify.yml](../.github/workflows/verify.yml) uses the requested `xcode-27` and
-`macos-26` runner labels with Xcode 27 and 26.6 respectively, official checkout/upload actions, read-only repository permission,
-and [Scripts/verify.sh](../Scripts/verify.sh). The script records actual versions,
-verifies the selected Xcode version, runs compiler/runtime checks, builds for a real iOS target,
-and chooses an installed recent simulator. A missing required SDK/runtime fails
-the job instead of counting as successful compatibility validation.
-
-The local execution of that script is evidence about this machine. A matching
-runner label is not proof of the same host or Xcode version. The selected
-simulator is recorded; the CI does not masquerade as minimum-runtime coverage.
-Exact native reference snapshots are opt-in with `--verify-reference` because
-OS behavior may change; process failures and the known crash diagnostic are
-checked in all modes. Runtime tests contain explicit observations which may
-need investigation on a new OS, not blind expectation changes.
-
-Workflow YAML parsing and shell syntax were checked locally. The hosted run
-status is reported separately; branch protection and repository secrets are
-outside this task. The workflow does not publish anything.
-
-References: [GitHub runner labels](https://docs.github.com/en/actions/reference/runners/github-hosted-runners),
-[checkout v7.0.1](https://github.com/actions/checkout/releases/tag/v7.0.1),
-[upload-artifact v7.0.2](https://github.com/actions/upload-artifact/releases/tag/v7.0.2).
+The workflow uses `xcode-27` and `macos-26`, explicitly selects Xcode 27/26.6,
+checks actual versions and chooses an available simulator. It invokes the same
+[verification entry point](../Scripts/verify.sh) used locally, including required
+SQLite process checks on macOS and iOS. Missing tools/runtimes or unexpected
+probe failures fail the job. No skip is used to hide a failing persistence test.

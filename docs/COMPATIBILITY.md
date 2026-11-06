@@ -32,26 +32,27 @@ passed. The test now checks functional behavior across containers; the memory
 diagnostic and true-restart check are separate. No timeout increase or broad
 skip was used to turn that failure into success.
 
-## Earlier hosted coverage
+## Final hosted coverage
 
-The [GitHub CI report](GITHUB_CI.md) records the earlier committed code, exact run
-links and artifacts. The new SQLite checks have **not** been pushed or executed
-on GitHub Actions, or tested with the older Xcode 26.6 compiler locally.
+The [GitHub CI report](GITHUB_CI.md) records both successful jobs on the revised
+tests, exact run links and artifacts. The three-process SQLite checks and six
+native lifetime diagnostics ran on macOS and iOS in **both** hosted jobs. Xcode
+26.6 was exercised on GitHub, not installed locally.
 
 | Hosted runner | Xcode / Swift | macOS runtime | iOS simulator | Runtime results |
 | --- | --- | --- | --- | --- |
-| `xcode-27` | 27.2 RC (27B48) / 6.4.2 (`swiftlang-6.4.2.1.9`) | 27.0.1 (26A434) | 27.1 (24A94425) | 15 macOS + 15 iOS passed; no skips/failures |
-| `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.7.2 (25G332) | 26.5 (23F77) | 15 macOS + 15 iOS passed; no skips/failures |
+| `xcode-27` | 27.2 (27B52) / 6.4.2 (`swiftlang-6.4.2.1.9`) | 27.0.1 (26A434) | 27.2 (24B8117) | 15 macOS + 15 iOS passed; no skips/failures; 3 restart phases passed per runtime |
+| `macos-26` | 26.6 (17F113) / 6.3.3 (`swiftlang-6.3.3.1.3`) | 26.6.2 (25G83) | 26.5 (23F77) | 15 macOS + 15 iOS passed; no skips/failures; 3 restart phases passed per runtime |
 
 ## Limits of each kind of evidence
 
 | Dimension | Actual coverage | What it does not prove |
 | --- | --- | --- |
 | Swift language | Swift 6 mode, complete concurrency, warnings as errors | Execution with the Swift 6.0 compiler |
-| Compiler/toolchain | Latest changes: local 27.1; previous committed code: hosted 26.6 and 27.2 RC | Every intermediate toolchain; hosted validation of uncommitted changes |
+| Compiler/toolchain | Revised tests: local 27.1; hosted 26.6 and 27.2 | Every intermediate toolchain |
 | macOS SDKs | 27.0 locally; earlier 26.5/27.2 hosted; arm64 target macOS 14.0 | macOS 14 runtime; Intel execution |
 | iOS SDK/device builds | 27.1 locally; earlier 26.5/27.2 hosted; arm64 target iOS 17.0 | iOS 17.0 runtime or physical device execution |
-| Compiler fixtures | Latest local run: 3 positive + 10 diagnostic-checked negative per macOS/iOS SDK | Any nonzero compiler exit being acceptable |
+| Compiler fixtures | Local and both hosted jobs: 3 positive + 10 diagnostic-checked negative per macOS/iOS SDK | Any nonzero compiler exit being acceptable |
 | Runtime suite | Memory, SQLite, actors, generic use; inheritance only where available | Every patch release or application schema |
 | Process restart | Exact saved values and deletions verified after process exit on all current rows | Portable ModelID values, UIKit lifecycle, migrations, abrupt-crash/power-loss durability |
 | Memory lifecycle | Six native-only controls per runtime; retention after construction/save on 17.5; unsaved insertion retained on all rows | A guaranteed release deadline, or proof of a permanent leak |
@@ -72,5 +73,6 @@ availability; none of the new restart/lifetime probes uses it.
 other untested patch versions, macOS 14, physical iOS hardware and Intel remain
 unverified. Native identifier equality/resolution across containers or launches
 is still not guaranteed. `existingModel`, Codable and public raw constructors
-remain excluded. The release checklist's broader minimum-runtime condition is
-not fully satisfied, and no publication is implied by this local validation.
+remain excluded. These coverage gaps and semantic limits remain explicit in
+the release documentation. Technical readiness does not validate unexecuted
+runtimes, and publication still requires the maintainer's separate approval.

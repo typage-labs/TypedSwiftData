@@ -1,131 +1,133 @@
-# GitHub CI validation — 2026-11-05
+# Final GitHub CI validation — 2026-11-06
 
-This is the historical hosted report. The subsequent
-[SQLite/runtime validation](SQLITE_RUNTIME_VALIDATION.md) adds local iOS 17.5
-coverage and revised persistence checks. Those changes have not been pushed;
-the hosted run links below do not validate them.
+**Both hosted jobs passed the revised tests and SQLite process checks.** The
+[repository](https://github.com/typage-labs/TypedSwiftData) remains **private**,
+with `main` as its default branch. No tag, GitHub Release or publication was
+created. The four public API elements and package manifest are unchanged from
+`7672530a2be0116a4d378d4dd0e83e8a6a70e154`.
 
-The [private repository](https://github.com/typage-labs/TypedSwiftData) uses `main`
-and the description “Strongly typed model identifiers for Apple's SwiftData
-framework.” No remote README/license was generated; no tag or release was
-created. The four public API elements are unchanged from the local review.
+## Audited code and observed execution
 
-## Observed hosted execution
+The integration commit is
+[`dab3240b2401399d35badead408fceb9aa5557fb`](https://github.com/typage-labs/TypedSwiftData/commit/dab3240b2401399d35badead408fceb9aa5557fb).
+[Run 42239504551](https://github.com/typage-labs/TypedSwiftData/actions/runs/42239504551)
+passed both jobs on its first attempt. No follow-up code/test adjustment or
+rerun was needed to obtain those CI results.
 
-[Run 42111357262](https://github.com/typage-labs/TypedSwiftData/actions/runs/42111357262)
-passed both jobs on commit
-[`770643d6de6fe11a238d5439af18607ae03bc1b1`](https://github.com/typage-labs/TypedSwiftData/commit/770643d6de6fe11a238d5439af18607ae03bc1b1).
-Neither job required a retry, an expectation change, or a production-code fix.
-The later documentation commit records these results; its own status is visible
-in the [workflow history](https://github.com/typage-labs/TypedSwiftData/actions/workflows/verify.yml).
+The tables below record that code-validation run. The documentation follow-up
+records these observations and is also subject to the complete workflow; its
+own run is available in the
+[workflow history on main](https://github.com/typage-labs/TypedSwiftData/actions/workflows/verify.yml).
+The final handoff verifies that the latest pushed commit's own two jobs are
+green, rather than relying on the parent commit's result.
 
 | Observed property | Job A | Job B |
 | --- | --- | --- |
-| Job | [Xcode 27](https://github.com/typage-labs/TypedSwiftData/actions/runs/42111357262/job/127539454288) | [Xcode 26.6](https://github.com/typage-labs/TypedSwiftData/actions/runs/42111357262/job/127539454787) |
+| Job link | [Xcode 27](https://github.com/typage-labs/TypedSwiftData/actions/runs/42239504551/job/127965749892) | [Xcode 26.6](https://github.com/typage-labs/TypedSwiftData/actions/runs/42239504551/job/127965750186) |
 | Requested runner | `xcode-27` | `macos-26` |
-| Actual image / revision | `xcode-27-arm64` / `20261026.0314.1` | `macos-26-arm64` / `20261102.0473.1` |
-| Selected Xcode | **27.2 RC**, build **27B48** | **26.6**, build **17F113** |
+| Image / revision | `xcode-27-arm64` / `20261104.0337.1` | `macos-26-arm64` / `20261026.0455.2` |
+| Selected Xcode | **27.2 (27B52)** | **26.6 (17F113)** |
 | Apple Swift | **6.4.2**, `swiftlang-6.4.2.1.9`, driver `1.168.6` | **6.3.3**, `swiftlang-6.3.3.1.3`, driver `1.148.6` |
-| macOS runtime | **27.0.1**, build **26A434** | **26.7.2**, build **25G332** |
-| macOS / iOS SDKs | **27.2 / 27.2** | **26.5 / 26.5** |
-| Selected simulator | iPhone Duo, **iOS 27.1 (24A94425)** | iPhone 17e, **iOS 26.5 (23F77)** |
-| macOS tests: passed / skipped / failed | **15 / 0 / 0** | **15 / 0 / 0** |
-| iOS tests: passed / skipped / failed | **15 / 0 / 0** | **15 / 0 / 0** |
-| Positive compilation, per SDK | **3 / 3** | **3 / 3** |
-| Negative compilation, per SDK | **10 / 10**, expected diagnostics verified | **10 / 10**, expected diagnostics verified |
-| Harness regression | **1 passed** | **1 passed** |
-| Isolated macOS native probes | **15 checked, 0 unexpected failures** | **15 checked, 0 unexpected failures** |
-| Generic iOS device build | Passed, deployment target iOS 17 | Passed, deployment target iOS 17 |
+| macOS runtime | **27.0.1 (26A434)** | **26.6.2 (25G83)** |
+| macOS / iOS SDK | **27.2 / 27.2** | **26.5 / 26.5** |
+| Selected simulator | iPhone 17e, **iOS 27.2 (24B8117)** | iPhone 17 Pro, **iOS 26.5 (23F77)** |
+| macOS tests: executed / passed / skipped / failed | **15 / 15 / 0 / 0** | **15 / 15 / 0 / 0** |
+| iOS tests: executed / passed / skipped / failed | **15 / 15 / 0 / 0** | **15 / 15 / 0 / 0** |
+| Python harness tests: executed / passed / failed | **4 / 4 / 0** | **4 / 4 / 0** |
+| Positive compilation fixtures, per SDK | **3 / 3 verified** | **3 / 3 verified** |
+| Negative compilation fixtures, per SDK | **10 / 10 expected rejections verified** | **10 / 10 expected rejections verified** |
+| Actual generic iOS device build | Passed, deployment target 17.0 | Passed, deployment target 17.0 |
+| Native macOS experiments | **15 process checks passed** | **15 process checks passed** |
 
-Counts come from Swift Testing's final summaries, not the separate XCTest line
-reporting zero tests. Each runtime execution discovers 15 tests in three suites,
-covering memory, SQLite, actors, generic use and inheritance. Inheritance is
-available on both hosted runtime pairs, so no runtime test was skipped here.
-The earlier local iOS 18.5 execution explicitly skipped one inheritance test.
+The runtime counts come from Swift Testing, not the separate XCTest summary
+that reports zero tests for these suites. Inheritance is available on these
+hosted runtimes, so no runtime test was skipped. The native experiment count
+contains 14 normal completions and one specifically checked deliberate
+**SIGTRAP (-5)** in an isolated process, not an unexpected failure.
 
-Each SDK compilation batch also emits the library module: 14 compiler
-invocations for 3 positive and 10 negative client fixtures. Both SDK batches
-use Swift 6, complete concurrency checking and warnings as errors, targeting
-`arm64-apple-macosx14.0` and `arm64-apple-ios17.0`. Rejections check the primary
-error's count, file, line and message pattern. They cover model mismatches,
-invariance, inaccessible construction, immutability, absent Codable/existence
-APIs, and direct existential access. None passed merely because compilation
-returned a nonzero exit code.
+Both toolchains verified the same ten primary compiler rejection messages as
+the local run. The checks still require the expected error count, file, line
+and message. Each SDK batch additionally compiles the library module, for
+14 compiler invocations per SDK; negative exits are expected rejections, not
+unexplained build failures.
 
-## Comparison with local validation
+## SQLite checks actually executed in CI
 
-The local pre-push run used Xcode 27.1 (27A9275), Apple Swift 6.4
-(`swiftlang-6.4.0.34.1`), macOS 27.0.1 and iOS 27.0 (24A434). It passed the same
-15 macOS tests, 15 iOS tests, compiler fixtures and harness regression. Hosted
-CI adds a complete Xcode 26.6 toolchain/runtime combination and Xcode 27.2 RC;
-the earlier standalone SDK 26.5 check was not a substitute for that combination.
+Both jobs run `check_sqlite_restart.py --lifetime` on **macOS and the selected
+iOS simulator**, unconditionally after the corresponding prerequisites.
 
-The ten primary rejection messages match the local run on both hosted
-toolchains. No diagnostic exception or test availability workaround was added.
-Xcode's App Intents metadata extraction warning appears in both iOS build logs;
-it is unrelated to a test skip and did not suppress any Swift Testing execution.
+| Job / runtime | Writer / reader-deleter / final reader PIDs | Phases passed | Integrity | Lifetime controls |
+| --- | --- | --- | --- | --- |
+| Xcode 27 / macOS | 5669 / 5670 / 5671 | **3 / 3** | `ok` | **6 completed** |
+| Xcode 27 / iOS | 9404 / 9416 / 9426 | **3 / 3** | `ok` | **6 completed** |
+| Xcode 26.6 / macOS | 1664 / 1670 / 1676 | **3 / 3** | `ok` | **6 completed** |
+| Xcode 26.6 / iOS | 6045 / 6049 / 6199 | **3 / 3** | `ok` | **6 completed** |
 
-Native probes run in observation mode. The harness enforces process completion
-and the one specific deliberate trap; it does not assert all native snapshot
-fields in this mode. Inspection of the recorded fields found the same lifecycle,
-pending-deletion, registration and SQLite behavior as the local reference:
+For each row, the artifacts confirm normal zero exits, distinct process IDs,
+the same unique stored nonce, Restaurant row counts **1 → 0 → 0**, and one
+unchanged Customer sentinel. The reader checks the saved value, obtains fresh
+typed IDs, compares native/typed behavior, verifies registration and saves the
+deletion. The final process confirms persisted deletion and the surviving
+sentinel. The parent checks the actual SQLite header and `integrity_check`.
+No old `ModelID` or `PersistentIdentifier` is serialized or reconstructed.
 
-- Saving a new model replaces its temporary ID; previously copied IDs stay old.
-- Registration can include pending-deleted or stale instances and disappear
-  when an unretained instance leaves the native registration cache.
-- Two contexts sharing one container can resolve a saved ID. Different
-  containers provide no general resolution guarantee.
-- In the same-file/two-container and SQLite-reopen probes, the row still exists
-  but the old ID predicate finds zero rows, while the newly obtained ID finds it.
-- Native `model(for:)` can return a castable placeholder. Reading the deleted
-  placeholder's property produces the expected **SIGTRAP (-5)** and checked
-  invalidated-backing-data diagnostic, in an isolated child process.
-- Sorted identifier fetches with pending insertions throw the recorded native
-  error. The wrapper preserves that error.
+The memory controls are a separate native-only diagnostic. Retention is
+recorded as an observation, not converted into a persistence failure or a
+promise about deallocation. Unexpected child failure, timeout, missing
+completion, incorrect nonce/count or integrity failure still fails the job.
+The Python regressions verify important failure paths, and the earlier local
+real-reader negative control rejected missing persisted data.
 
-For each job, 14 probes finish with exit 0 and one has the precisely expected
-trap. An unrelated crash, missing completion marker or launcher failure fails
-the job. Matching these observations does not certify SwiftData correctness or
-justify adding an existence resolver.
+## Local evidence and remaining limits
 
-## Workflow and evidence audit
+The pre-push local complete verification passed on **Xcode 27.1 (27A9275)**,
+Swift **6.4** (`swiftlang-6.4.0.34.1`), macOS **27.0.1 (26A434)** and iOS
+**17.5 (21F79)**: 15 macOS tests passed; 14 iOS tests passed and the inheritance
+test was explicitly skipped because it requires iOS 26. Both local process
+restart batches, four Python regressions and compiler fixture batches passed.
+Additional earlier local executions of the same revised runtime tests covered
+iOS 18.5, 27.0 and 27.1. See [the runtime report](SQLITE_RUNTIME_VALIDATION.md)
+and [compatibility matrix](COMPATIBILITY.md).
 
-The jobs explicitly select an installed Xcode from the requested family and
-record the exact version/build. Job A chose the highest installed Xcode 27,
-which was a release candidate; it is not described as a stable Xcode 27.2
-release. Each job verifies simulator availability using `simctl` before using
-its UUID. No simulator destination is hardcoded. `fail-fast: false` lets both
-jobs report results. Permissions are `contents: read`, with checkout credentials
-not persisted. There is no publishing, release or tag step.
+**iOS 17.5 is runtime-validated for the exercised API scenarios. iOS 17.0 and
+macOS 14 were not executed.** Other untested versions, physical devices, Intel
+execution and the Swift 6.0 compiler remain uncovered. A deployment-target
+build does not establish runtime execution on that minimum version.
 
-The private run includes `verification-xcode-27` and `verification-xcode-26.6`
-artifacts: summaries, actual versions, simulator inventory, compilation
-diagnostics, runtime logs, probe results, harness output and command exit codes.
-An incomplete test summary cannot be recorded as success. Raw artifact files
-are not copied into Git; [the evidence policy](evidence/README.md) explains the
-portable summaries and local reports.
+SQLite data persistence and saved deletion survive the tested normal process
+restarts. Identifier stability, existence, permanence and store membership
+remain unpromised. Native `ModelContainer` retention was observed on iOS 17.5,
+including without caller-owned models, contexts or IDs; the internal retaining
+reference and permanent leakage have not been established. No guarantee about
+UIKit lifecycle, migrations, sudden crashes or power-loss durability is added.
 
-Before pushing, `.gitignore` and the staged inventory were audited. `.build`,
-`.swiftpm`, DerivedData, Xcode user state, Python caches, raw local evidence,
-test result bundles, logs and local environment files are excluded. Required
-package files, Apache 2.0 LICENSE, documentation, sources and tests are present.
-Production source hashes matched the reviewed implementation. TypedCoreData
-was not modified.
+## Audit and repository state
 
-## Release assessment
+The diff from `7672530a` contains test fixture corrections, the separate runtime
+probes, verification/reporting scripts, documentation and the workflow step
+label. Production source hashes and `Package.swift` match the baseline. The
+new process probe imports the real library as an external client; the memory
+probe does not link it. TypedCoreData was not modified.
 
-**Private GitHub CI validation: complete and green.** Xcode 26.6 is now an
-executed compatibility result, rather than an intended floor alone.
+`.gitignore` and the candidate/staged inventories were checked: `.build`,
+DerivedData, temporary SQLite stores, binaries, logs, `.xcresult`, personal
+configuration and raw local evidence are excluded. Required package files and
+the existing Apache 2.0 license remain present. The workflow retains
+`contents: read`, non-persisted checkout credentials and artifact upload with
+`if: always()`. It verifies Xcode versions and installed simulators; there is
+no hardcoded simulator model or publishing step.
 
-**NOT READY for public release under the existing release checklist:** iOS 17
-and macOS 14 runtime coverage is still missing. Neither hosted image supplied
-iOS 17, and neither host ran macOS 14. The maintainer must either obtain that
-coverage or explicitly accept/revise the support policy before publication.
-Compilation for those deployment targets is not runtime validation.
+The private artifacts `verification-xcode-27` and `verification-xcode-26.6`
+contain version records, test counts/logs, compiler diagnostics, step exits,
+SQLite phase evidence and native observations. The earlier pre-SQLite hosted
+validation is preserved in
+[run 42113100885](https://github.com/typage-labs/TypedSwiftData/actions/runs/42113100885).
 
-Swift compiler 6.0, physical iOS hardware and Intel execution remain unverified;
-the package only claims Swift 6 language mode and the environments listed here.
-The new CI runs exercise native subprocess probes on macOS; iOS CI exercises
-the package runtime suites, not that entire native probe program. Historical
-iOS probe observations remain documented separately. Public visibility, a
-version tag and a release still require a separate publication instruction.
+## Technical readiness
+
+**READY FOR PUBLIC RELEASE**, subject to the maintainer's separate publication
+decision. No demonstrated API defect, unexplained test failure, missing required
+CI check or artifact leak remains in this review. The explicit coverage limits
+above remain part of the release documentation; readiness is not a claim that
+unexecuted runtimes have been validated. No public visibility change, tag or
+GitHub Release is performed by this task.
